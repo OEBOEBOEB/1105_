@@ -1678,6 +1678,10 @@ btn.addEventListener('click', function(){
       }
     
   }
+
+  if(list.innerHTML == ''){
+    list.innerHTML = '<p>目前沒有資料</p>'
+  }
 })
 /*
 area.addEventListener('change', function(e){
