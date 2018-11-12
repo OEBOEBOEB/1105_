@@ -1600,93 +1600,131 @@ var data = [
     "經度": "120.31043745804701"
   }
 ];
-var map;
-function initMap() {
-  //設定中心點座標
-  
-  map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 13,
-    center: {lat: 22.6048695, lng: 120.299119}
-  });
-  
-  var area = document.getElementById('area');
-  var type = document.getElementById('type');
-  var list = document.querySelector('.list');
-  var areaTotal = {};
-  var typeTotal = {};
-  var option;
-  var li;
-  var str = '';
-  
-  for(var i = 0; i < data.length; i++){
-      var areaContent = data[i]['行政區'];
-      var typeContent = data[i]['型式'];
-  
-      if(areaTotal[areaContent] == undefined){
-          areaTotal[areaContent] = 1;
-          option = document.createElement('option');
-          option.value = data[i]['行政區'];
-          option.text = data[i]['行政區'];
-          area.add(option);
-      }else{
-          areaTotal[areaContent] += 1;
-      }
-  
-      if(typeTotal[typeContent] == undefined){
-          typeTotal[typeContent] = 1;
-          option = document.createElement('option');
-          option.value = data[i]['型式'];
-          option.text = data[i]['型式'];
-          type.add(option);
-      }else{
-          typeTotal[typeContent] += 1;
-      }
-  }
-  
-  area.addEventListener('change', function(e){
-  
-      list.innerHTML = ''; // 清除 ul 裡的所有 li 
-  
-      for(var i = 0; i < data.length; i++){
-      
-          if(data[i]['行政區'] == area.value && data[i]['型式'] == type.value){
-              li = document.createElement('li');
-              list.appendChild(li);
-              li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];                           
-          }
-          
-      }
-      
-  })
-  
-  type.addEventListener('change', function(e){
-  
-      list.innerHTML = ''; // 清除 ul 裡的所有 li 
-  
-      for(var i = 0; i < data.length; i++){
-      
-          if(data[i]['行政區'] == area.value && data[i]['型式'] == type.value){
-              li = document.createElement('li');
-              list.appendChild(li);
-              li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];                            
-          }
-          
-      }
-  })
-  
-  // //跑迴圈依序將值塞入到 marker
-  // for(i=0;i<data.result.records.length;i++){
-  //   var str ={};
-  //   var place = {};
-  
-  //   place.lat = parseFloat(data.result.records[i]['Lat']);
-  //   place.lng = parseFloat(data.result.records[i]['Lng']);
-  
-  //   str.map = map;
-  //   str.title= data.result.records[i]['臨時停車處所']
-  //   str.position = place;
-  //   console.log(str);
-  //   new google.maps.Marker(str);
-  // }
 
+  
+var area = document.getElementById('area');
+var type = document.getElementById('type');
+var btn = document.getElementById('btn');
+var list = document.querySelector('.list');
+var areaTotal = {};
+var typeTotal = {};
+var option;
+var li;
+var str = '';
+
+option = document.createElement('option');
+option.value = 'all';
+option.text = '所有地區';
+area.add(option);
+
+option = document.createElement('option');
+option.value = 'all';
+option.text = '所有型式';
+type.add(option);
+
+for(var i = 0; i < data.length; i++){
+    var areaContent = data[i]['行政區'];
+    var typeContent = data[i]['型式'];
+
+    if(areaTotal[areaContent] == undefined){
+        areaTotal[areaContent] = 1;
+        option = document.createElement('option');
+        option.value = data[i]['行政區'];
+        option.text = data[i]['行政區'];
+        area.add(option);
+    }else{
+        areaTotal[areaContent] += 1;
+    }
+
+    if(typeTotal[typeContent] == undefined){
+        typeTotal[typeContent] = 1;
+        option = document.createElement('option');
+        option.value = data[i]['型式'];
+        option.text = data[i]['型式'];
+        type.add(option);
+    }else{
+        typeTotal[typeContent] += 1;
+    }
 }
+
+// for(var i = 0; i < data.length; i++){
+//   li = document.createElement('li');
+//   list.appendChild(li);
+//   li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];
+// }
+
+btn.addEventListener('click', function(){
+
+  list.innerHTML = ''; // 清除 ul 裡的所有 li 
+
+  for(var i = 0; i < data.length; i++){
+  
+      if(data[i]['行政區'] == area.value && data[i]['型式'] == type.value){
+        li = document.createElement('li');
+        list.appendChild(li);
+        li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];                           
+      }else if(area.value == 'all' && data[i]['型式'] == type.value){
+        li = document.createElement('li');
+        list.appendChild(li);
+        li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];
+      }else if(data[i]['行政區'] == area.value && type.value == 'all'){
+        li = document.createElement('li');
+        list.appendChild(li);
+        li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];
+      }else if(area.value == 'all' && type.value == 'all'){
+        li = document.createElement('li');
+        list.appendChild(li);
+        li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];
+      }
+    
+  }
+})
+/*
+area.addEventListener('change', function(e){
+
+    list.innerHTML = ''; // 清除 ul 裡的所有 li 
+
+    for(var i = 0; i < data.length; i++){
+    
+        if(data[i]['行政區'] == area.value && data[i]['型式'] == type.value){
+          li = document.createElement('li');
+          list.appendChild(li);
+          li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];                           
+        }else if(area.value == 'all' && data[i]['型式'] == type.value){
+          li = document.createElement('li');
+          list.appendChild(li);
+          li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];
+        }else if(area.value == 'all' && type.value == 'all'){
+          li = document.createElement('li');
+          list.appendChild(li);
+          li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];
+        }
+      
+  }
+    
+    
+})
+
+type.addEventListener('change', function(e){
+
+    list.innerHTML = ''; // 清除 ul 裡的所有 li 
+
+    for(var i = 0; i < data.length; i++){
+    
+        if(data[i]['行政區'] == area.value && data[i]['型式'] == type.value){
+          li = document.createElement('li');
+          list.appendChild(li);
+          li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];                            
+        }else if(data[i]['行政區'] == area.value && type.value == 'all'){
+          li = document.createElement('li');
+          list.appendChild(li);
+          li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];
+        }else if(area.value == 'all' && type.value == 'all'){
+          li = document.createElement('li');
+          list.appendChild(li);
+          li.textContent = data[i]['行政區'] + ' - ' + data[i]['停車場名稱'];
+        }
+        
+    }
+})
+*/
